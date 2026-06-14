@@ -2,19 +2,60 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap');
+
 :root {
-  --background: #0f0d0a;
-  --foreground: #d4c9b8;
-  --muted: #8a7f72;
-  --accent: #b8a88a;
-  --highlight: #d4a853;
-  --shadow: #1a1713;
-  --card-bg: #1a1713;
-  --border: #2a251f;
+  --bg-primary: #0a0a0a;
+  --bg-secondary: #111111;
+  --bg-card: rgba(17, 17, 17, 0.7);
+  --text-primary: #f0ede6;
+  --text-secondary: #a09888;
+  --text-muted: #6b6558;
+  --accent: #c4a44a;
+  --accent-dim: rgba(196, 164, 74, 0.15);
+  --border: rgba(255, 255, 255, 0.06);
+  --border-accent: rgba(196, 164, 74, 0.2);
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,0.06) transparent;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: "Georgia", "Times New Roman", serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: 'Inter', sans-serif;
+}
+
+.glass {
+  background: var(--bg-card);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border);
+}
+
+.glass-accent {
+  background: rgba(196, 164, 74, 0.04);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border-accent);
+}
+
+.text-balance {
+  text-wrap: balance;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+.animate-fade-in-delayed {
+  animation: fadeIn 0.5s ease-out 0.3s forwards;
+  opacity: 0;
 }

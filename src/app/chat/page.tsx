@@ -59,7 +59,6 @@ export default function ChatPage() {
       const res = await fetch("/api/conversation", { method: "POST" });
       const data = await res.json();
       setConversationId(data.id);
-      // Add opening message from the mentor
       const openingMsg: Message = {
         id: "opening",
         role: "assistant",
@@ -173,8 +172,11 @@ export default function ChatPage() {
 
   if (status === "loading") {
     return (
-      <div className="flex min-h-[50vh] items-center justify-center">
-        <div className="text-sm text-zodiac-muted">Preparing the space...</div>
+      <div className="flex min-h-[60vh] items-center justify-center">
+        <div className="flex items-center gap-3 text-text-muted">
+          <span className="inline-block h-2 w-2 animate-pulse rounded-full bg-gold" />
+          <span className="text-sm">Preparing the space...</span>
+        </div>
       </div>
     );
   }
@@ -183,22 +185,39 @@ export default function ChatPage() {
 
   return (
     <div className="flex flex-col">
-      <div className="mb-4 border-b border-zodiac-border pb-4">
-        <h2 className="text-sm tracking-widest text-zodiac-gold uppercase">
-          {isResolved
-            ? "The mirror is clear"
-            : "Speak freely"}
-        </h2>
+      <div className="mb-6 rounded-xl glass px-5 py-4">
+        <div className="flex items-center gap-3">
+          <div
+            className={`h-2 w-2 rounded-full ${
+              isResolved ? "bg-green-500" : "bg-gold"
+            }`}
+          />
+          <h2 className="text-xs tracking-widest text-text-secondary uppercase">
+            {isResolved ? "The mirror is clear" : "Speak freely"}
+          </h2>
+        </div>
         {isResolved && (
-          <p className="mt-2 text-xs italic text-zodiac-muted">
+          <p className="mt-2 font-serif text-sm italic text-text-muted">
             You already knew. You just needed to see it.
           </p>
         )}
       </div>
 
       <div className="space-y-6">
-        {messages.map((msg) => (
-          <div key={msg.id}>
+        {messages.length === 0 && !isLoading && (
+          <div className="py-8 text-center">
+            <p className="font-serif text-lg italic text-text-muted">
+              The silence between words speaks loudest.
+            </p>
+          </div>
+        )}
+
+        {messages.map((msg, i) => (
+          <div
+            key={msg.id}
+            className="animate-fade-in"
+            style={{ animationDelay: `${i * 0.05}s` }}
+          >
             <ChatMessage message={msg} />
             {msg.film && !isResolved && (
               <div className="mt-4">
@@ -209,9 +228,9 @@ export default function ChatPage() {
         ))}
 
         {isLoading && (
-          <div className="flex items-center gap-2 text-sm text-zodiac-muted">
-            <span className="inline-block h-2 w-2 animate-pulse rounded-full bg-zodiac-gold" />
-            Reflecting...
+          <div className="flex items-center gap-3 text-sm text-text-muted">
+            <span className="inline-block h-2 w-2 animate-pulse rounded-full bg-gold" />
+            <span className="font-serif italic">Reflecting...</span>
           </div>
         )}
 
@@ -223,11 +242,14 @@ export default function ChatPage() {
         )}
 
         {isResolved && (
-          <div className="border border-zodiac-gold/30 bg-zodiac-card/50 p-6 text-center">
-            <div className="mb-2 text-2xl text-zodiac-gold">◇</div>
-            <p className="text-sm italic text-zodiac-muted">
+          <div className="rounded-xl glass-accent p-8 text-center">
+            <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-gold-dim">
+              <span className="font-serif text-xl text-gold">◇</span>
+            </div>
+            <p className="font-serif text-lg italic text-text-secondary">
               The film has served its purpose.
-              <br />
+            </p>
+            <p className="mt-1 text-sm text-text-muted">
               When you are ready for a new mirror, return.
             </p>
             <button
@@ -239,9 +261,10 @@ export default function ChatPage() {
                 setShowReflection(false);
                 startConversation();
               }}
-              className="mt-4 border border-zodiac-border px-4 py-2 text-xs tracking-wider text-zodiac-muted hover:border-zodiac-gold hover:text-zodiac-gold"
+              className="group mt-6 inline-flex items-center gap-2 rounded-full border border-border-accent px-6 py-2.5 text-xs tracking-widest text-gold transition-all hover:bg-gold-dim uppercase"
             >
               Begin anew
+              <span className="transition-transform group-hover:translate-x-0.5">→</span>
             </button>
           </div>
         )}
@@ -255,29 +278,31 @@ export default function ChatPage() {
             e.preventDefault();
             sendMessage(input);
           }}
-          className="mt-6 flex gap-2"
+          className="mt-6"
         >
-          <input
-            type="text"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder={
-              showReflection
-                ? "Share your reflection..."
-                : currentFilm
-                  ? "Watch the film first, then reflect..."
-                  : "Speak..."
-            }
-            disabled={isLoading || !!currentFilm}
-            className="flex-1 border border-zodiac-border bg-zodiac-bg px-4 py-3 text-sm text-zodiac-fg placeholder-zodiac-muted/50 outline-none focus:border-zodiac-gold disabled:opacity-50"
-          />
-          <button
-            type="submit"
-            disabled={isLoading || !input.trim() || !!currentFilm}
-            className="border border-zodiac-gold px-6 py-3 text-sm tracking-wider text-zodiac-gold transition-colors hover:bg-zodiac-gold/10 disabled:opacity-30"
-          >
-            Send
-          </button>
+          <div className="glass flex items-center gap-2 rounded-xl p-1.5">
+            <input
+              type="text"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              placeholder={
+                showReflection
+                  ? "Share your reflection..."
+                  : currentFilm
+                    ? "Watch the film first, then reflect..."
+                    : "Speak what weighs on your mind..."
+              }
+              disabled={isLoading || !!currentFilm}
+              className="flex-1 bg-transparent px-3 py-2.5 text-sm text-text-primary placeholder-text-muted/50 outline-none disabled:opacity-40"
+            />
+            <button
+              type="submit"
+              disabled={isLoading || !input.trim() || !!currentFilm}
+              className="rounded-lg border border-gold/60 px-5 py-2 text-xs tracking-widest text-gold transition-all hover:bg-gold-dim disabled:opacity-30 disabled:cursor-not-allowed uppercase"
+            >
+              Send
+            </button>
+          </div>
         </form>
       )}
     </div>

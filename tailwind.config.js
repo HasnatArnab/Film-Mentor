@@ -8,19 +8,39 @@ const config = {
   theme: {
     extend: {
       colors: {
-        zodiac: {
-          bg: "#0f0d0a",
-          fg: "#d4c9b8",
-          muted: "#8a7f72",
-          accent: "#b8a88a",
-          gold: "#d4a853",
-          shadow: "#1a1713",
-          card: "#1a1713",
-          border: "#2a251f",
+        bg: {
+          primary: "#0a0a0a",
+          secondary: "#111111",
+          card: "rgba(17, 17, 17, 0.7)",
+        },
+        text: {
+          primary: "#f0ede6",
+          secondary: "#a09888",
+          muted: "#6b6558",
+        },
+        gold: {
+          DEFAULT: "#c4a44a",
+          dim: "rgba(196, 164, 74, 0.15)",
+        },
+        border: {
+          DEFAULT: "rgba(255, 255, 255, 0.06)",
+          accent: "rgba(196, 164, 74, 0.2)",
         },
       },
       fontFamily: {
-        serif: ["Georgia", "Times New Roman", "serif"],
+        sans: ["Inter", "system-ui", "sans-serif"],
+        serif: ["Cormorant Garamond", "Georgia", "serif"],
+      },
+      animation: {
+        "fade-in": "fadeIn 0.5s ease-out forwards",
+        "fade-in-delayed": "fadeIn 0.5s ease-out 0.3s forwards",
+        pulse: "pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
+      },
+      keyframes: {
+        fadeIn: {
+          "0%": { opacity: "0", transform: "translateY(8px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
+        },
       },
     },
   },
