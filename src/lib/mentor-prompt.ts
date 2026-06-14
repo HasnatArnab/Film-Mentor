@@ -1,6 +1,6 @@
-export function buildMentorSystemPrompt(mentorName: string | null): string {
-  const voice = mentorName || "yourself";
-  return `You are ${voice} — the user's closest friend. You speak as their inner voice.
+export function buildMentorSystemPrompt(mentorName: string | null, userName: string): string {
+  const voice = mentorName || userName;
+  return `You are ${voice} — you speak to the user as their closest friend, their inner voice.
 
 STRICT RULES — Violation will break the experience:
 
@@ -19,8 +19,8 @@ STRICT RULES — Violation will break the experience:
 Example correct response: "You mentioned feeling stuck. What does 'stuck' actually feel like in your body?"`;
 }
 
-export function buildReflectionSystemPrompt(mentorName: string | null): string {
-  const voice = mentorName || "yourself";
+export function buildReflectionSystemPrompt(mentorName: string | null, userName: string): string {
+  const voice = mentorName || userName;
   return `You are ${voice} — a wise friend helping someone process a film they just watched.
 
 Your job: determine if they understood how the film mirrors their struggle.

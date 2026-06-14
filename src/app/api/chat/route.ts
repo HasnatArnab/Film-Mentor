@@ -45,12 +45,13 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Not found" }, { status: 404 });
     }
 
-      // Determine the mentor's voice: friend's name, or null (reverts to "yourself")
+      // Determine the mentor's voice: friend's name, user's name as fallback
       const dbUser = await prisma.user.findUnique({
         where: { id: session.user.id },
         select: { mentorName: true },
       });
       const mentorName = dbUser?.mentorName || null;
+      const userName = session.user.name || "you";
 
     // Save user message
     if (message) {
@@ -86,7 +87,7 @@ export async function POST(req: NextRequest) {
         .join("\n");
 
       const analysisMessages: { role: "system" | "user" | "assistant"; content: string }[] = [
-        { role: "system", content: buildReflectionSystemPrompt(mentorName) },
+        { role: "system", content: buildReflectionSystemPrompt(mentorName, userName) },
         { role: "user", content: buildReflectionAnalysisPrompt(
             latestFilm?.title || "",
             reflection,
@@ -180,7 +181,7 @@ export async function POST(req: NextRequest) {
 
     // Normal conversation flow
     const allMessages: { role: "system" | "user" | "assistant"; content: string }[] = [
-      { role: "system", content: buildMentorSystemPrompt(mentorName) },
+      { role: "system", content: buildMentorSystemPrompt(mentorName, userName) },
     ];
 
     // Add past messages (last 10 for context)
@@ -205,19 +206,35 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // Enforce minimum 3 user exchanges before allowing film suggestion
+    const userMsgCount = conversation.messages.filter((m) => m.role === "user").length;
+    const canSuggest = userMsgCount >= 3;
+    const wantsToSuggest = aiResponse.includes("[SUGGEST_FILM]");
+
+    let finalResponse = aiResponse.replace("[SUGGEST_FILM]", "").trim();
+
+    // If not yet ready to suggest, force the response to contain a question
+    if (!canSuggest || !wantsToSuggest) {
+      // Remove any film suggestion token just in case
+      if (!finalResponse.endsWith("?") && !finalResponse.endsWith("？")) {
+        finalResponse = finalResponse.replace(/[.!]*$/, "") + "?";
+      }
+      // If response doesn't contain a question at all, append one
+      if (!finalResponse.includes("?")) {
+        finalResponse = finalResponse + " Tell me more about that?";
+      }
+    }
+
     // Save assistant message
-    const cleanResponse = aiResponse.replace("[SUGGEST_FILM]", "").trim();
     await prisma.message.create({
       data: {
         conversationId,
         role: "assistant",
-        content: cleanResponse,
+        content: finalResponse,
       },
     });
 
-    const suggestsFilm = aiResponse.includes("[SUGGEST_FILM]");
-
-    if (suggestsFilm) {
+    if (canSuggest && wantsToSuggest) {
       const themes = findThemesInText(
         [...conversation.messages.map((m) => m.content), message || ""].join(
           " "
@@ -239,7 +256,7 @@ export async function POST(req: NextRequest) {
         });
 
         return NextResponse.json({
-          message: cleanResponse,
+          message: finalResponse,
           film: { ...matchedFilm, ...suggestionData },
           status: "film-suggested",
         });
@@ -247,7 +264,7 @@ export async function POST(req: NextRequest) {
     }
 
     return NextResponse.json({
-      message: cleanResponse,
+      message: finalResponse,
       status: "active",
     });
   } catch (error) {
