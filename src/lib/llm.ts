@@ -16,11 +16,15 @@ export async function getLLMResponse(messages: Message[]): Promise<string> {
   const ollamaResult = await tryOllama(messages);
   if (ollamaResult !== null) return ollamaResult;
 
-  // 2. Try Google Gemini (free tier, requires free API key)
+  // 2. Try Grok (xAI, OpenAI-compatible API)
+  const grokResult = await tryGrok(messages);
+  if (grokResult !== null) return grokResult;
+
+  // 3. Try Google Gemini (free tier, requires free API key)
   const geminiResult = await tryGemini(messages);
   if (geminiResult !== null) return geminiResult;
 
-  // 3. Fallback to OpenAI (paid)
+  // 4. Fallback to OpenAI (paid)
   const openaiResult = await tryOpenAI(messages);
   if (openaiResult !== null) return openaiResult;
 
@@ -45,6 +49,35 @@ async function tryOllama(messages: Message[]): Promise<string | null> {
 
     const data: OllamaResponse = await res.json();
     return data.message?.content || "";
+  } catch {
+    return null;
+  }
+}
+
+async function tryGrok(messages: Message[]): Promise<string | null> {
+  const apiKey = process.env.GROK_API_KEY;
+  if (!apiKey) return null;
+
+  try {
+    const res = await fetch("https://api.x.ai/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify({
+        model: "grok-beta",
+        messages,
+        temperature: 0.8,
+        max_tokens: 600,
+      }),
+      signal: AbortSignal.timeout(30000),
+    });
+
+    if (!res.ok) return null;
+
+    const data = await res.json();
+    return data.choices?.[0]?.message?.content || "";
   } catch {
     return null;
   }

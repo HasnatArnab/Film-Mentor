@@ -119,7 +119,7 @@ export default function ChatPage() {
       const errorMsg: Message = {
         id: (Date.now() + 1).toString(),
         role: "assistant",
-        content: "I'm having trouble connecting. Please check that GEMINI_API_KEY and DATABASE_URL are set in your Vercel environment variables.",
+        content: "I'm having trouble connecting. Please check that GROK_API_KEY (or GEMINI_API_KEY) and DATABASE_URL are set in your Vercel environment variables.",
       };
       setMessages((prev) => [...prev, errorMsg]);
     } finally {
@@ -178,7 +178,7 @@ export default function ChatPage() {
       const errorMsg: Message = {
         id: (Date.now() + 1).toString(),
         role: "assistant",
-        content: "I'm having trouble connecting. Please check that GEMINI_API_KEY and DATABASE_URL are set in your Vercel environment variables.",
+        content: "I'm having trouble connecting. Please check that GROK_API_KEY (or GEMINI_API_KEY) and DATABASE_URL are set in your Vercel environment variables.",
       };
       setMessages((prev) => [...prev, errorMsg]);
     } finally {
