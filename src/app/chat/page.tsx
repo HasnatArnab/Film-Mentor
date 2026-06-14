@@ -112,6 +112,12 @@ export default function ChatPage() {
       }
     } catch (err) {
       console.error("Chat error", err);
+      const errorMsg: Message = {
+        id: (Date.now() + 1).toString(),
+        role: "assistant",
+        content: "I'm having trouble connecting. Please check that GEMINI_API_KEY and DATABASE_URL are set in your Vercel environment variables.",
+      };
+      setMessages((prev) => [...prev, errorMsg]);
     } finally {
       setIsLoading(false);
     }
@@ -161,6 +167,12 @@ export default function ChatPage() {
       }
     } catch (err) {
       console.error("Reflection error", err);
+      const errorMsg: Message = {
+        id: (Date.now() + 1).toString(),
+        role: "assistant",
+        content: "I'm having trouble connecting. Please check that GEMINI_API_KEY and DATABASE_URL are set in your Vercel environment variables.",
+      };
+      setMessages((prev) => [...prev, errorMsg]);
     } finally {
       setIsLoading(false);
     }
