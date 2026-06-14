@@ -4,7 +4,7 @@ import { Navbar } from "@/components/Navbar";
 import { Providers } from "./providers";
 
 export const metadata: Metadata = {
-  title: "Film Mentor — Find the film that finds you",
+  title: "Film Therapist — Find the film that finds you",
   description: "A Zen master who suggests films based on your life struggles",
 };
 

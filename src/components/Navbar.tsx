@@ -61,7 +61,7 @@ export function Navbar() {
           className="flex items-center gap-2 text-sm tracking-wider text-text-muted transition-colors hover:text-text"
         >
           <span className="font-serif text-lg italic text-gold">M</span>
-          <span className="hidden sm:inline">Film Mentor</span>
+          <span className="hidden sm:inline">Film Therapist</span>
         </Link>
 
         <div className="flex items-center gap-6">

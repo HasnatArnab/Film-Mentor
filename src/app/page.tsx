@@ -20,7 +20,7 @@ export default function Home() {
         </div>
 
         <h1 className="font-serif text-6xl font-light tracking-tight text-text">
-          Film Mentor
+          Film Therapist
         </h1>
         <p className="mx-auto mt-5 max-w-md font-serif text-xl leading-relaxed text-text-secondary">
           A film is a mirror. You do not watch it — it watches you.
