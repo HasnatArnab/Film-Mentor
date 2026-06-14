@@ -94,6 +94,10 @@ export default function ChatPage() {
         }),
       });
 
+      if (!res.ok) {
+        throw new Error(`API returned ${res.status}`);
+      }
+
       const data = await res.json();
 
       const assistantMsg: Message = {
@@ -147,6 +151,10 @@ export default function ChatPage() {
           reflection,
         }),
       });
+
+      if (!res.ok) {
+        throw new Error(`API returned ${res.status}`);
+      }
 
       const data = await res.json();
 
