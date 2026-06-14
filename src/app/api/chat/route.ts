@@ -98,9 +98,11 @@ export async function POST(req: NextRequest) {
 
       // Check if they understood
       const understood = aiResponse.includes("You already knew");
-      const suggestNewFilm = aiResponse.includes("another film");
+      const suggestNewFilm = aiResponse.includes("[SUGGEST_FILM]");
+      const cleanReflectionResponse = aiResponse.replace("[SUGGEST_FILM]", "").trim();
 
       if (suggestNewFilm || (!understood && aiResponse.length > 0)) {
+        const responseMessage = suggestNewFilm ? cleanReflectionResponse : aiResponse;
         // Find a different film
         const themes = findThemesInText(
           conversation.messages.map((m) => m.content).join(" ")
@@ -124,7 +126,7 @@ export async function POST(req: NextRequest) {
             data: {
               conversationId,
               role: "assistant",
-              content: aiResponse,
+              content: responseMessage,
             },
           });
 
@@ -134,7 +136,7 @@ export async function POST(req: NextRequest) {
           });
 
           return NextResponse.json({
-            message: aiResponse,
+            message: responseMessage,
             film: { ...newFilm, ...suggestionData },
             status: "film-suggested",
           });
@@ -151,7 +153,7 @@ export async function POST(req: NextRequest) {
         data: {
           conversationId,
           role: "assistant",
-          content: aiResponse,
+          content: cleanReflectionResponse,
         },
       });
 
@@ -170,16 +172,12 @@ export async function POST(req: NextRequest) {
       }
 
       return NextResponse.json({
-        message: aiResponse,
+        message: cleanReflectionResponse,
         status: understood ? "resolved" : "film-suggested",
       });
     }
 
     // Normal conversation flow
-    const history = conversation.messages
-      .map((m) => `${m.role}: ${m.content}`)
-      .join("\n");
-
     const allMessages: { role: "system" | "user" | "assistant"; content: string }[] = [
       { role: "system", content: buildMentorSystemPrompt(mentorName) },
     ];
@@ -207,17 +205,16 @@ export async function POST(req: NextRequest) {
     }
 
     // Save assistant message
+    const cleanResponse = aiResponse.replace("[SUGGEST_FILM]", "").trim();
     await prisma.message.create({
       data: {
         conversationId,
         role: "assistant",
-        content: aiResponse,
+        content: cleanResponse,
       },
     });
 
-    // Check if AI suggested a film (contains "Watch it" or "Watch this")
-    const suggestsFilm =
-      aiResponse.includes("Watch it") || aiResponse.includes("Watch this");
+    const suggestsFilm = aiResponse.includes("[SUGGEST_FILM]");
 
     if (suggestsFilm) {
       const themes = findThemesInText(
@@ -241,7 +238,7 @@ export async function POST(req: NextRequest) {
         });
 
         return NextResponse.json({
-          message: aiResponse,
+          message: cleanResponse,
           film: { ...matchedFilm, ...suggestionData },
           status: "film-suggested",
         });
@@ -249,7 +246,7 @@ export async function POST(req: NextRequest) {
     }
 
     return NextResponse.json({
-      message: aiResponse,
+      message: cleanResponse,
       status: "active",
     });
   } catch (error) {
