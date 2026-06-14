@@ -9,22 +9,21 @@ const config = {
     extend: {
       colors: {
         bg: {
-          primary: "#0a0a0a",
-          secondary: "#111111",
-          card: "rgba(17, 17, 17, 0.7)",
+          DEFAULT: "#0a0a0a",
+          card: "rgba(255,255,255,0.03)",
         },
         text: {
-          primary: "#f0ede6",
-          secondary: "#a09888",
-          muted: "#6b6558",
+          DEFAULT: "#f0ede6",
+          secondary: "#9a9287",
+          muted: "#605a50",
         },
         gold: {
           DEFAULT: "#c4a44a",
-          dim: "rgba(196, 164, 74, 0.15)",
+          dim: "rgba(196,164,74,0.08)",
         },
         border: {
-          DEFAULT: "rgba(255, 255, 255, 0.06)",
-          accent: "rgba(196, 164, 74, 0.2)",
+          DEFAULT: "rgba(255,255,255,0.05)",
+          accent: "rgba(196,164,74,0.08)",
         },
       },
       fontFamily: {
@@ -32,14 +31,23 @@ const config = {
         serif: ["Cormorant Garamond", "Georgia", "serif"],
       },
       animation: {
-        "fade-in": "fadeIn 0.5s ease-out forwards",
-        "fade-in-delayed": "fadeIn 0.5s ease-out 0.3s forwards",
+        "fade-in": "fadeIn 0.6s ease-out forwards",
+        "fade-in-up": "fadeInUp 0.8s ease-out forwards",
+        reveal: "reveal 0.4s ease-out forwards",
         pulse: "pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
       },
       keyframes: {
         fadeIn: {
-          "0%": { opacity: "0", transform: "translateY(8px)" },
+          "0%": { opacity: "0", transform: "translateY(6px)" },
           "100%": { opacity: "1", transform: "translateY(0)" },
+        },
+        fadeInUp: {
+          "0%": { opacity: "0", transform: "translateY(20px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
+        },
+        reveal: {
+          "0%": { opacity: "0", transform: "scale(0.98)" },
+          "100%": { opacity: "1", transform: "scale(1)" },
         },
       },
     },

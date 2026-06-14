@@ -46,32 +46,30 @@ export default function ProfilePage() {
   }
 
   return (
-    <div>
-      <div className="mb-8 rounded-xl glass p-6">
-        <div className="flex items-center gap-4">
-          <div className="flex h-14 w-14 items-center justify-center rounded-full bg-gold-dim">
-            <span className="font-serif text-xl text-gold">
-              {session?.user?.name?.[0]?.toUpperCase() || "?"}
-            </span>
-          </div>
-          <div>
-            <h1 className="font-serif text-2xl font-light tracking-wide text-text-primary">
-              {session?.user?.name}
-            </h1>
-            <p className="text-sm text-text-muted">Your journey in films</p>
-          </div>
+    <div className="mx-auto max-w-3xl">
+      <div className="mb-10 flex items-center gap-5">
+        <div className="flex h-16 w-16 items-center justify-center rounded-full border border-border-accent bg-gold-dim">
+          <span className="font-serif text-2xl text-gold">
+            {session?.user?.name?.[0]?.toUpperCase() || "?"}
+          </span>
+        </div>
+        <div>
+          <h1 className="font-serif text-3xl font-light tracking-wide text-text">
+            {session?.user?.name}
+          </h1>
+          <p className="mt-1 text-sm text-text-muted">Your journey in films</p>
         </div>
       </div>
 
       {conversations.length === 0 ? (
-        <div className="rounded-xl glass p-12 text-center">
-          <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-gold-dim">
-            <span className="font-serif text-xl text-gold/60">◇</span>
+        <div className="rounded-2xl border border-border bg-bg-card p-16 text-center">
+          <div className="mx-auto mb-5 h-14 w-14 rounded-full bg-gold-dim flex items-center justify-center">
+            <span className="font-serif text-2xl text-gold/60">◇</span>
           </div>
-          <p className="font-serif text-lg italic text-text-muted">
+          <p className="font-serif text-xl italic text-text-muted">
             No conversations yet.
           </p>
-          <p className="mt-1 text-sm text-text-muted">
+          <p className="mt-2 text-sm text-text-muted">
             Begin your first session to discover the film that finds you.
           </p>
         </div>
@@ -80,20 +78,20 @@ export default function ProfilePage() {
           {conversations.map((conv) => (
             <div
               key={conv.id}
-              className="group rounded-xl glass p-5 transition-all hover:border-gold/20"
+              className="rounded-2xl border border-border bg-bg-card p-5 transition-all hover:border-border-accent"
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div
-                    className={`h-2.5 w-2.5 rounded-full ${
+                    className={`h-2 w-2 rounded-full ${
                       conv.status === "resolved"
-                        ? "bg-green-500"
+                        ? "bg-green-400"
                         : conv.status === "film-suggested"
                           ? "bg-gold"
                           : "bg-text-muted"
                     }`}
                   />
-                  <span className="text-xs tracking-widest text-text-muted uppercase">
+                  <span className="text-[11px] tracking-[0.15em] text-text-muted uppercase">
                     {conv.status === "resolved"
                       ? "Resolved"
                       : conv.status === "film-suggested"

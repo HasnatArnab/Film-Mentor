@@ -184,34 +184,26 @@ export default function ChatPage() {
   const isResolved = status_ === "resolved";
 
   return (
-    <div className="flex flex-col">
-      <div className="mb-6 rounded-xl glass px-5 py-4">
-        <div className="flex items-center gap-3">
-          <div
-            className={`h-2 w-2 rounded-full ${
-              isResolved ? "bg-green-500" : "bg-gold"
-            }`}
-          />
-          <h2 className="text-xs tracking-widest text-text-secondary uppercase">
-            {isResolved ? "The mirror is clear" : "Speak freely"}
-          </h2>
+    <div className="mx-auto max-w-3xl">
+      <div className="mb-8 text-center">
+        <div
+          className={`inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-[11px] tracking-[0.15em] uppercase ${
+            isResolved
+              ? "bg-green-500/10 text-green-400"
+              : "bg-gold-dim text-gold"
+          }`}
+        >
+          <div className={`h-1.5 w-1.5 rounded-full ${isResolved ? "bg-green-400" : "bg-gold"}`} />
+          {isResolved ? "The mirror is clear" : "Speak freely"}
         </div>
         {isResolved && (
-          <p className="mt-2 font-serif text-sm italic text-text-muted">
+          <p className="mt-3 font-serif text-lg italic text-text-secondary">
             You already knew. You just needed to see it.
           </p>
         )}
       </div>
 
       <div className="space-y-6">
-        {messages.length === 0 && !isLoading && (
-          <div className="py-8 text-center">
-            <p className="font-serif text-lg italic text-text-muted">
-              The silence between words speaks loudest.
-            </p>
-          </div>
-        )}
-
         {messages.map((msg, i) => (
           <div
             key={msg.id}
@@ -220,7 +212,7 @@ export default function ChatPage() {
           >
             <ChatMessage message={msg} />
             {msg.film && !isResolved && (
-              <div className="mt-4">
+              <div className="mt-5">
                 <FilmSuggestion film={msg.film} onWatch={handleWatchFilm} />
               </div>
             )}
@@ -228,7 +220,7 @@ export default function ChatPage() {
         ))}
 
         {isLoading && (
-          <div className="flex items-center gap-3 text-sm text-text-muted">
+          <div className="flex items-center gap-3 px-1 py-3 text-sm text-text-muted">
             <span className="inline-block h-2 w-2 animate-pulse rounded-full bg-gold" />
             <span className="font-serif italic">Reflecting...</span>
           </div>
@@ -242,14 +234,14 @@ export default function ChatPage() {
         )}
 
         {isResolved && (
-          <div className="rounded-xl glass-accent p-8 text-center">
-            <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-gold-dim">
-              <span className="font-serif text-xl text-gold">◇</span>
+          <div className="animate-reveal rounded-2xl border border-border bg-bg-card p-12 text-center">
+            <div className="mx-auto mb-5 h-14 w-14 rounded-full bg-gold-dim flex items-center justify-center">
+              <span className="font-serif text-2xl text-gold">◇</span>
             </div>
-            <p className="font-serif text-lg italic text-text-secondary">
+            <p className="font-serif text-2xl font-light italic text-text-secondary">
               The film has served its purpose.
             </p>
-            <p className="mt-1 text-sm text-text-muted">
+            <p className="mt-2 text-sm text-text-muted">
               When you are ready for a new mirror, return.
             </p>
             <button
@@ -261,7 +253,7 @@ export default function ChatPage() {
                 setShowReflection(false);
                 startConversation();
               }}
-              className="group mt-6 inline-flex items-center gap-2 rounded-full border border-border-accent px-6 py-2.5 text-xs tracking-widest text-gold transition-all hover:bg-gold-dim uppercase"
+              className="group mt-8 inline-flex items-center gap-2 rounded-full border border-border-accent px-7 py-2.5 text-[11px] tracking-[0.15em] text-gold transition-all hover:bg-gold-dim uppercase"
             >
               Begin anew
               <span className="transition-transform group-hover:translate-x-0.5">→</span>
@@ -278,9 +270,9 @@ export default function ChatPage() {
             e.preventDefault();
             sendMessage(input);
           }}
-          className="mt-6"
+          className="mt-8"
         >
-          <div className="glass flex items-center gap-2 rounded-xl p-1.5">
+          <div className="glass-strong flex items-center gap-2 rounded-2xl p-2">
             <input
               type="text"
               value={input}
@@ -293,12 +285,12 @@ export default function ChatPage() {
                     : "Speak what weighs on your mind..."
               }
               disabled={isLoading || !!currentFilm}
-              className="flex-1 bg-transparent px-3 py-2.5 text-sm text-text-primary placeholder-text-muted/50 outline-none disabled:opacity-40"
+              className="flex-1 bg-transparent px-4 py-3 text-sm text-text placeholder-text-muted/50 outline-none disabled:opacity-40"
             />
             <button
               type="submit"
               disabled={isLoading || !input.trim() || !!currentFilm}
-              className="rounded-lg border border-gold/60 px-5 py-2 text-xs tracking-widest text-gold transition-all hover:bg-gold-dim disabled:opacity-30 disabled:cursor-not-allowed uppercase"
+              className="rounded-xl border border-gold/60 px-6 py-2.5 text-[11px] tracking-[0.15em] text-gold transition-all hover:bg-gold-dim disabled:opacity-30 disabled:cursor-not-allowed uppercase"
             >
               Send
             </button>
