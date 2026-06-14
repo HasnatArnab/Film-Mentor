@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { getLLMResponse } from "@/lib/llm";
 import {
   buildMentorSystemPrompt,
+  buildReflectionSystemPrompt,
   buildReflectionAnalysisPrompt,
 } from "@/lib/mentor-prompt";
 import {
@@ -85,7 +86,7 @@ export async function POST(req: NextRequest) {
         .join("\n");
 
       const analysisMessages: { role: "system" | "user" | "assistant"; content: string }[] = [
-        { role: "system", content: buildMentorSystemPrompt(mentorName) },
+        { role: "system", content: buildReflectionSystemPrompt(mentorName) },
         { role: "user", content: buildReflectionAnalysisPrompt(
             latestFilm?.title || "",
             reflection,

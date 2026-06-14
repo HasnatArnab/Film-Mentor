@@ -63,7 +63,7 @@ export default function ChatPage() {
         id: "opening",
         role: "assistant",
         content:
-          "Sit. Breathe. Tell me what brings you here. What is the weight you carry?",
+          "Sit. Breathe. What brings you here?",
       };
       setMessages([openingMsg]);
     } catch (err) {
