@@ -1,4 +1,3 @@
-/** @type {import('tailwindcss').Config} */
 const config = {
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
@@ -8,10 +7,6 @@ const config = {
   theme: {
     extend: {
       colors: {
-        bg: {
-          DEFAULT: "#0a0a0a",
-          card: "rgba(255,255,255,0.03)",
-        },
         text: {
           DEFAULT: "#f0ede6",
           secondary: "#9a9287",
@@ -22,8 +17,12 @@ const config = {
           dim: "rgba(196,164,74,0.08)",
         },
         border: {
-          DEFAULT: "rgba(255,255,255,0.05)",
+          DEFAULT: "rgba(255, 255, 255, 0.05)",
           accent: "rgba(196,164,74,0.08)",
+        },
+        bg: {
+          DEFAULT: "#0a0a0a",
+          card: "rgba(255,255,255,0.03)",
         },
       },
       fontFamily: {
@@ -34,7 +33,6 @@ const config = {
         "fade-in": "fadeIn 0.6s ease-out forwards",
         "fade-in-up": "fadeInUp 0.8s ease-out forwards",
         reveal: "reveal 0.4s ease-out forwards",
-        pulse: "pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
       },
       keyframes: {
         fadeIn: {
@@ -55,4 +53,4 @@ const config = {
   plugins: [],
 };
 
-export default config;
+module.exports = config;
